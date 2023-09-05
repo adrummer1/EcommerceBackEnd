@@ -4,28 +4,22 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // The `/api/products` endpoint
 
 // GET request to find all products
-router.get('/', async (req, res) => {
-  try {
-    const products = await Product.findAll({
-      incude: [
-        {
-          model: Category,
-          attributes: ['id', 'category_name'],
-        },
-        {
-          model: Tag,
-          attributes: ['id', 'tag_name'],
-          through: {
-            model: Tag,
-            attributes: [],
-          },
-        },
-      ],
+router.get('/', (req, res) => {
+  Product.findAll({
+    include: [
+      Category,
+      {
+        model: Tag,
+        through: ProductTag,
+      },
+    ],
+  })
+    .then((products) => res.json(products))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
     });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to retrieve products.'})
-  }
-});  
+});
 
 // GET request to retrieve on product by `id`
 router.get('/:id', async (req, res) => {
@@ -72,14 +66,6 @@ router.post('/', async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Internal server error. '});
   }
-  /* req.body should look like this...
-    {
-      product_name: "Basketball",
-      price: 200.00,
-      stock: 3,
-      tagIds: [1, 2, 3, 4]
-    }
-  */
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
@@ -139,7 +125,7 @@ router.put('/:id', (req, res) => {
         });
       }
 
-      return res.json(product);
+      return res.json({ message: 'Product updated successfully.'});
     })
     .catch((err) => {
       // console.log(err);

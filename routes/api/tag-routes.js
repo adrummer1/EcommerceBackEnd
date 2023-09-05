@@ -4,21 +4,17 @@ const { Tag, Product, ProductTag } = require('../../models');
 // The `/api/tags` endpoint
 
 // GET request to retrieve all tags
-router.get('/', async (req, res) => {
-  try {
-    const tags = await Tag.findAll({
+router.get('/', (req, res) => {
+    Tag.findAll({
       include: [
         {
           model: Product,
           through: ProductTag,
-          as: 'products',
         },
-      ]
-    });
-    res.status(200).json(tags);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to retrieve tags' });
-  }
+      ],
+    })
+    .then((tags) => res.status(200).json(tags))
+    .catch((err) => res.status(500).json(err));
 });
 
 // GET request to retrieve a single tag by `id`
