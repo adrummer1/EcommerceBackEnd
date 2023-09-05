@@ -3,20 +3,75 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 
 // The `/api/products` endpoint
 
-// get all products
-router.get('/', (req, res) => {
-  // find all products
-  // be sure to include its associated Category and Tag data
+// GET request to find all products
+router.get('/', async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      incude: [
+        {
+          model: Category,
+          attributes: ['id', 'category_name'],
+        },
+        {
+          model: Tag,
+          attributes: ['id', 'tag_name'],
+          through: {
+            model: Tag,
+            attributes: [],
+          },
+        },
+      ],
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to retrieve products.'})
+  }
+});  
+
+// GET request to retriece on product by `id`
+router.get('/:id', async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const productData = await Product.findByPk(productId, {
+      include: [
+        {
+          model: Category,
+          attributes: ['id', 'category_name'], 
+        },
+        {
+          model: Tag,
+          attributes: ['id', 'tag_name'],
+          through: {
+            model: ProductTag,
+            attributes: [],
+          },
+        },
+      ],
+    });
+    if (!productData) {
+      return res.status(404).json({ message: 'Product not found. '});
+    }
+    res.status(200).json(productData);
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error. '});
+  }
 });
 
-// get one product
-router.get('/:id', (req, res) => {
-  // find a single product by its `id`
-  // be sure to include its associated Category and Tag data
-});
-
-// create new product
-router.post('/', (req, res) => {
+// POST request to create a new product
+router.post('/', async (req, res) => {
+  try {
+    const { product_name, price, stock, tagIds } = req.body;
+    const newProduct = await Product.create({
+      product_name,
+      price,
+      stock,
+    });
+    if (tagIds && tagIds.length) {
+      await newProduct.addTags(tagIds);
+    }
+    res.status(200).json(newProduct);
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error. '});
+  }
   /* req.body should look like this...
     {
       product_name: "Basketball",
@@ -92,7 +147,22 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteProduct = await Product.destroy({
+      where: {
+        id: id
+      }
+    });
+    if (deleteProduct) {
+      res.status(200).json({ message: 'Product deleted successfully. '});
+    } else {
+      res.status(404).json({ message: 'Product not found.' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error. '});
+  }
   // delete one product by its `id` value
 });
 
