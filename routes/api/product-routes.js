@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
   }
 });  
 
-// GET request to retriece on product by `id`
+// GET request to retrieve on product by `id`
 router.get('/:id', async (req, res) => {
   try {
     const productId = req.params.id;
