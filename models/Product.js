@@ -17,7 +17,7 @@ Product.init(
       autoIncrement: true,
     },
     product_name: {
-      type: DateTypes.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     price: {
