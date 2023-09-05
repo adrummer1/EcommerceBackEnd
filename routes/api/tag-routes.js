@@ -56,11 +56,14 @@ router.put('/:id', async (req, res) => {
   try {
     const tagId = req.params.id;
     const { tag_name } = req.body;
-    const updatedTag = await Tag.update(
+    const updatedRowCount = await Tag.update(
       { tag_name },
-      { where: { id: tagId }}
+      { where: {
+          id: req.params.id,
+         }
+      }
     );
-    if (updatedTag[0] === 0) {
+    if (updatedRowCount === 1) {
       res.status(200).json({ message: 'Tag updated successfully.' });
     } else {
       res.status(404).json({ message: 'Tag not found' });
