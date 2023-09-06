@@ -78,12 +78,12 @@ router.delete("/:id", async (req, res) => {
       },
     });
     if (!tagData) {
-      res.status(404).json({ message: "No tag with this id was found." });
+      res.status(404).json({ message: 'No tag with this id was found.' });
       return;
     }
-    res.status(200).json({ message: "Tag deleted successfully." });
+    res.status(200).json({ message: 'Tag deleted successfully.' });
   } catch (err) {
-    res.status(500).json({ message: "Internal server error." });
+    res.status(500).json({ message: 'Internal server error.' });
   }
 });
 

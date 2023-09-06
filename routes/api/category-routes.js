@@ -51,7 +51,7 @@ router.put('/:id', async (req, res) => {
     const { category_name } = req.body;
     const updatedCategory = await Category.update(
       { category_name },
-      // { where: { id: categoryId }}
+      { where: { id: categoryId }}
     );
     if (updatedCategory[0] === 0) {
       return res.status(404).json({ message: 'Category not found' });
@@ -76,7 +76,7 @@ router.delete('/:id', async (req, res) => {
     }
     req.status(200).json({ message: 'Category deleted successfully. '});
   } catch (err) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: 'Internal server error.' });
   }
 }); 
 
