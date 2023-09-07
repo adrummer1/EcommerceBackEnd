@@ -69,7 +69,7 @@ router.delete('/:id', (req, res) => {
         id: req.params.id,
       },
     })
-      .then((category) => res.status(200).json({ message: 'Category deleted successfully.' }))
+      .then(() => res.status(200).json({ message: 'Category deleted successfully.' }))
       .catch((category) => res.status(400).json(err));
   });
 
