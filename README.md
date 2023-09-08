@@ -17,7 +17,7 @@ When invoked, the application allows the user to GET product, category and tag d
 
 ## Screenshot
 
-![Screenshot](./images/EcommerceBackEnd.png)
+![Screenshot](./Images/EcommerceBackEnd.png)
 
 ## Video Demonstration
 
