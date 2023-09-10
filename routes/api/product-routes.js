@@ -74,7 +74,7 @@ router.post('/', (req, res) => {
     });
 });
 
-// update product
+// PUT request to update product
 router.put('/:id', (req, res) => {
   // update product data
   Product.update(req.body, {
@@ -119,6 +119,7 @@ router.put('/:id', (req, res) => {
     });
 });
 
+// Delete request to delete a product
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;

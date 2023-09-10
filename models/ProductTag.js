@@ -5,6 +5,7 @@ const Tag = require('./Tag');
 
 class ProductTag extends Model {}
 
+// Field and rules for ProductTag model
 ProductTag.init(
   {
     id: {

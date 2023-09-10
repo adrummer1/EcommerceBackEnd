@@ -5,6 +5,7 @@ const Product = require('./Product.js');
 
 class Category extends Model {}
 
+// Field and rules for category model
 Category.init(
   {
     id: {
